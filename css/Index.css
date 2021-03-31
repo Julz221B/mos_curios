@@ -1,0 +1,23 @@
+body { 
+    background-image: linear-gradient(to bottom right, rgb(0, 0, 0), rgb(104, 223, 74)); 
+}
+a {
+    color: silver !important;
+  }
+.btn { 
+    color: silver !important;
+}
+.btn.btn-outline-primary { 
+    border: none !important;
+}
+img {
+    width: 700px;
+    height: 500px;
+    border-radius: 15%;
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  }
+  
+  
