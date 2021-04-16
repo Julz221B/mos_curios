@@ -1,23 +1,25 @@
-body { 
-    background-image: linear-gradient(to bottom right, rgb(0, 0, 0), rgb(104, 223, 74)); 
+body {
+    background: linear-gradient(green, purple, silver, black);
+    background-position: center;
 }
+
 a {
-    color: silver !important;
-  }
-.btn { 
+    color: rgba(197, 8, 197, 0.932) !important;
+}
+
+.btn {
     color: silver !important;
 }
-.btn.btn-outline-primary { 
+
+.btn.btn-outline-primary {
     border: none !important;
 }
-img {
+
+#homepage_header {
     width: 700px;
     height: 500px;
     border-radius: 15%;
     display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-  }
-  
-  
+    margin-left: auto;
+    margin-right: auto;
+}
