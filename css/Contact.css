@@ -1,0 +1,38 @@
+#snake_contact {
+    height: auto;
+    width: 300px;
+}
+.center {  
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+img:hover {
+    transform: scaleX(-1);
+  }
+  #Hello {
+    background-color:black !important; 
+    border-radius: 12px;
+    border: none !important;
+    color: #8b36d1 !important;
+    padding: 15px 32px !important;
+    text-align: center !important;
+    display: inline-block !important;
+    font-size: 16px !important;
+  }
+  #Goodbye {
+    background-color:black !important; 
+    border-radius: 12px;
+    border: none !important;
+    color: #8b36d1 !important;
+    padding: 15px 32px !important;
+    text-align: center !important;
+    display: inline-block !important;
+    font-size: 16px !important;
+
+button:hover {
+      opacity: 100 !important;
+  }
