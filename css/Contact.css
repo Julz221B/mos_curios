@@ -22,17 +22,22 @@ img:hover {
     text-align: center !important;
     display: inline-block !important;
     font-size: 16px !important;
+    position: absolute !important;
   }
   #Goodbye {
     background-color:black !important; 
-    border-radius: 12px;
+    border-radius: 12px !important;
     border: none !important;
     color: #8b36d1 !important;
     padding: 15px 32px !important;
     text-align: center !important;
     display: inline-block !important;
     font-size: 16px !important;
-
+    position:relative !important;
+  }
 button:hover {
       opacity: 100 !important;
+  }
+  .flex-container {
+    position: static !important;
   }

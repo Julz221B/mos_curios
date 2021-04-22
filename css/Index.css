@@ -43,10 +43,29 @@ a {
 }
 
 #homepage_header {
-    width: 500px;
+    width: 350px;
     height: auto;
-    border-radius: 15%;
+    border-radius: 10%;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    padding-top: 35px;
+}
+.container {
+    width: auto !important;
+
+}
+/*Bio text*/
+.home_text {
+    font-family: 'Clicker Script', Arial, sans-serif; 
+    font-size: 45px;
+    color:rgb(53, 170, 216);
+    text-shadow: 5px 5px 7px #000000 !important;
+    font-weight: bold !important;
+    background-color: rgba(0, 0, 0, 0.60) !important;
+    padding: 25px;
+}
+#exclusions {
+    font-family: 'Clicker Script', Arial, sans-serif;
+    font-size:medium;
 }
