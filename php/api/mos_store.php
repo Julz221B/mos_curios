@@ -4,9 +4,8 @@ require_once(dirname(__DIR__, 1) . '/Classes/class-storeItem.php');
 
 use Ramsey\Uuid\Uuid;
 use mos_curios\StoreItem\StoreItem;
-
-
-header("Content-type: application/json");
+use PDO;
+use PDOException;
 
 // Create empty reply
 $reply = new stdClass();
@@ -24,14 +23,23 @@ if (isset($_SERVER["REQUEST_METHOD"])) {
 
     switch ($httpMethod) {
         case "GET":
-            // Handle GET method
-            StoreItem::getItemById($pgConnection, "e3ad9857-430c-4873-9ef5-2d1dc1e20148");
-
+            if (sizeof($_GET) > 0) {
+                if (array_key_exists("itemId", $_GET)) {
+                    $item = StoreItem::getItemById($pgConnection, $_GET["itemId"]);
+                    $reply->data = $item;
+                    break;
+                } else if(array_key_exists("itemName", $_GET)) {
+                    $item = StoreItem::getItemByName($pgConnection, $_GET["itemName"]);
+                    $reply->data = $item;
+                    break;
+                }
+            }
             break;
         case "POST":
             // Handle POST method
             $filename = $_FILES["itemImage"]["name"];
             $tempname = $_FILES["itemImage"]["tmp_name"];
+            var_dump($_FILES);
             $folder = "img/" . $filename;
             $item = new StoreItem(Uuid::uuid4()->toString(), $_POST["itemName"], $_POST["itemDescription"], $_POST["itemPrice"], $filename, false);
 
@@ -67,12 +75,13 @@ function addItem($db, StoreItem $item, $reply)
 
     // Check if query ran successfully
     $dbq = pg_query($db, $query);
-    if (! $dbq) {
-        throw new Exception("Unable to execute query");
+    if (!$dbq) {
+        throw new Exception("Unable to execute query $query");
     }
 
     $reply->status = 200;
     $reply->data = "Store Item Added!";
 }
 
+header("Content-type: application/json");
 echo (json_encode($reply));
