@@ -4,13 +4,14 @@ require_once(dirname(__DIR__, 1) . '/Classes/class-storeItem.php');
 
 use Ramsey\Uuid\Uuid;
 use mos_curios\StoreItem\StoreItem;
-use PDO;
-use PDOException;
 
 // Create empty reply
 $reply = new stdClass();
 $reply->status = 200;
 $reply->data = null;
+
+// Start PHP session
+session_start();
 
 // Connect to database
 $pgConnection = pg_connect("host=localhost dbname=mos_curios user=postgres password=1234");
@@ -28,24 +29,38 @@ if (isset($_SERVER["REQUEST_METHOD"])) {
                     $item = StoreItem::getItemById($pgConnection, $_GET["itemId"]);
                     $reply->data = $item;
                     break;
-                } else if(array_key_exists("itemName", $_GET)) {
+                } else if (array_key_exists("itemName", $_GET)) {
                     $item = StoreItem::getItemByName($pgConnection, $_GET["itemName"]);
                     $reply->data = $item;
                     break;
                 }
             }
+            $items = StoreItem::getAllItems($pgConnection);
+            $reply->data = $items;
             break;
         case "POST":
-            // Handle POST method
-            $filename = $_FILES["itemImage"]["name"];
-            $tempname = $_FILES["itemImage"]["tmp_name"];
-            var_dump($_FILES);
-            $folder = "img/" . $filename;
-            $item = new StoreItem(Uuid::uuid4()->toString(), $_POST["itemName"], $_POST["itemDescription"], $_POST["itemPrice"], $filename, false);
+            if (! isset($_FILES["itemImage"])) {
+                throw new Exception("No image found for new Item, an Item image is required");
+            }
 
-            addItem($pgConnection, $item, $reply);
+            // Get image file name
+            $imgFileName = $_FILES["itemImage"]["name"];
 
-            move_uploaded_file($tempname, $folder);
+            // Define upload path
+            $imgFilePath = dirname(__DIR__, 2).'/assets/images';
+
+            // Concat path and filename to make full path
+            $imgFullPath = $imgFilePath.'/'.$imgFileName;
+            move_uploaded_file($_FILES["itemImage"]["tmp_name"], $imgFullPath);
+
+            // Create a DateTime object to store date this store item was created
+            $dateCreated = new DateTime();
+
+            $itemToAdd = new StoreItem(Uuid::uuid4()->toString(), $_POST["itemName"], $_POST["itemDescription"], $_POST["itemPrice"], $imgFullPath, $dateCreated);
+
+            $itemToAdd->insertItem($pgConnection);
+
+            $reply->data = "Store Item Added!";
 
             break;
         case "PUT":
@@ -61,26 +76,6 @@ if (isset($_SERVER["REQUEST_METHOD"])) {
         default:
             throw new Exception("Unknown method " . $httpMethod);
     }
-}
-
-function addItem($db, StoreItem $item, $reply)
-{
-    // Check connection status
-    if (pg_connection_busy($db)) {
-        throw new Exception("Connection Busy!");
-    }
-    // DON'T FORGET THE SINGLE QUOTES!!!!!
-    // Forgetting the single quotes will result in a SQL syntax error
-    $query = "INSERT INTO store_items VALUES ('$item->itemId', '$item->itemName', '$item->itemDescription', '$item->itemPrice', '$item->onSale');";
-
-    // Check if query ran successfully
-    $dbq = pg_query($db, $query);
-    if (!$dbq) {
-        throw new Exception("Unable to execute query $query");
-    }
-
-    $reply->status = 200;
-    $reply->data = "Store Item Added!";
 }
 
 header("Content-type: application/json");
