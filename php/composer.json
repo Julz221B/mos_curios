@@ -1,0 +1,8 @@
+{
+    "name": "mos_curios/mos_curios",
+    "description": "This is the API for Mo's Curios website and shop",
+    "require": {
+        "ramsey/uuid": "4.1.1",
+        "pear/validate": "^0.8.5"
+    }
+}
