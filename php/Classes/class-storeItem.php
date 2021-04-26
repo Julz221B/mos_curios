@@ -22,8 +22,9 @@ class StoreItem
      * @param string $itemDescription
      * @param float $itemPrice
      * @param string $itemImage
+     * @param DateTime $itemDateAdded
      */
-    public function __construct($itemId, string $itemName, string $itemDescription, float $itemPrice, string $itemImage, DateTime $itemDateAdded)
+    public function __construct(string $itemId, string $itemName, string $itemDescription, float $itemPrice, string $itemImage)
     {
         //TODO: Should I put the data sanitization in here? Or somewhere else?
 
@@ -32,7 +33,6 @@ class StoreItem
         $this->itemDescription = $itemDescription;
         $this->itemPrice = $itemPrice;
         $this->itemImage = $itemImage;
-        $this->$itemDateAdded = $itemDateAdded;
     }
 
     public function insertItem($db): void
@@ -46,7 +46,7 @@ class StoreItem
         $query = "INSERT INTO store_items VALUES('$this->itemId', '$this->itemName', '$this->itemDescription', '$this->itemPrice', '$this->itemImage');";
 
         // Send query
-        pg_send_query($db, $query) or die("Couldn't insert item into database.");
+        pg_send_query($db, $query) or die("Couldn't insert item $this into database.");
     }
 
     /**
