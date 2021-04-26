@@ -4,6 +4,7 @@ require_once(dirname(__DIR__, 1) . '/Classes/class-storeItem.php');
 
 use Ramsey\Uuid\Uuid;
 use mos_curios\StoreItem\StoreItem;
+use Pear\Validate;
 
 // Create empty reply
 $reply = new stdClass();
@@ -43,8 +44,20 @@ if (isset($_SERVER["REQUEST_METHOD"])) {
                 throw new Exception("No image found for new Item, an Item image is required");
             }
 
+            // Check file upload type
+            if ($_FILES['itemImage']['type'] !== 'image/jpeg' && $_FILES['itemImage']['type'] !== 'image/png') {
+                $reply->data = trim($_FILES['itemImage']['name']) . " is not a JPEG or PNG.";
+                $reply->status = 500;
+
+                // Break due to bad upload
+                break;
+            }
+
             // Get image file name
             $imgFileName = $_FILES["itemImage"]["name"];
+
+            // Remove spaces from filename
+            $imgFileName = preg_replace("/\s+/", "", $imgFileName);
 
             // Define upload path
             $imgFilePath = dirname(__DIR__, 2).'/assets/images';
@@ -53,14 +66,13 @@ if (isset($_SERVER["REQUEST_METHOD"])) {
             $imgFullPath = $imgFilePath.'/'.$imgFileName;
             move_uploaded_file($_FILES["itemImage"]["tmp_name"], $imgFullPath);
 
-            // Create a DateTime object to store date this store item was created
-            $dateCreated = new DateTime();
-
-            $itemToAdd = new StoreItem(Uuid::uuid4()->toString(), $_POST["itemName"], $_POST["itemDescription"], $_POST["itemPrice"], $imgFullPath, $dateCreated);
+            $itemToAdd = new StoreItem(Uuid::uuid4(), trim($_POST["itemName"]), trim($_POST["itemDescription"]), $_POST["itemPrice"], $imgFullPath);
 
             $itemToAdd->insertItem($pgConnection);
 
+            // Set reply
             $reply->data = "Store Item Added!";
+            $reply->status = 200;
 
             break;
         case "PUT":
