@@ -18,6 +18,9 @@ session_start();
 $pgConnection = pg_connect("host=localhost dbname=mos_curios user=postgres password=1234");
 
 // TODO: Test database connection.
+if (! StoreItem::isConnected($pgConnection)) {
+    throw new Exception("Couldn't connect to the database...");
+}
 
 // If request method is set, get method type
 if (isset($_SERVER["REQUEST_METHOD"])) {

@@ -14,31 +14,39 @@ use Ramsey\Uuid\Codec\StringCodec;
 class User
 {
     private string $userId;
-    private string $userName;
+    private string $firstName;
+    private string $lastName;
     private DateTime $userDOB;
+
+    private string $userName;
     private string $userEmail;
     private string $userPassword;
 
-    public function __construct(string $userId, string $userName, DateTime $DOB, string $userEmail, string $userPassword)
+    public function __construct(string $userId, string $firstName, string $lastName, DateTime $userDOB, string $userName, string $userEmail, string $userPassword)
     {
         $this->userId = $userId;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->userDOB = $userDOB;
         $this->userName = $userName;
-        $this->userDOB = $DOB;
         $this->userEmail = $userEmail;
         $this->userPassword = $userPassword;
     }
 
-    public function insertUser($db)
+    public function insert($db)
     {
-
+        // Check db connection
         if (!User::isConnected($db)) {
-            throw new Exception("Unable to connect to DB");
+            throw new Exception("There was a problem connecting to the database.");
         }
 
-        // Create query
-        $query = "INSERT INTO users VALUES('$this->userId', '$this->userName', '$this->userEmail', crypt('$this->password', gen_salt('bf')));";
+        // Change DateTime to string
+        $dob = $this->userDOB->format('m-d-Y');
 
-        pg_send_query($db, $query) or die("Couldn't insert user with id of $this->userId");
+        $query = "INSERT INTO users VALUES";
+        $values = "('$this->userId', '$this->firstName', '$this->lastName', '$this->userDOB', '$this->userName', '$this->userEmail', '$this->userPassword');";
+
+        var_dump($values);
     }
 
     /**
@@ -55,27 +63,5 @@ class User
 
         // Return false if connection failed
         return true;
-    }
-
-    /**
-     * Validates a given date
-     */
-    public static function dateIsValid(string $date): bool
-    {
-        $sd = filter_var($date, FILTER_SANITIZE_STRING);
-        // parse date
-        $dArr = explode('/', $sd);
-
-        // Make sure date is in correct format
-        if (sizeof($dArr) < 3) {
-            throw new InvalidArgumentException("Date provided is in an invalid format.");
-        }
-
-        // Validate date
-        if (checkdate($dArr[1], $dArr[0], $dArr[2])) {
-            return true;
-        }
-
-        return false;
     }
 }
