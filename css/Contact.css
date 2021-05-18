@@ -1,43 +1,43 @@
 #snake_contact {
-    height: auto;
-    width: 300px;
+  height: auto;
+  width: 300px;
 }
-.center {  
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    padding-top: 50px;
-    padding-bottom: 50px;
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 img:hover {
-    transform: scaleX(-1);
-  }
-  #Hello {
-    background-color:black !important; 
-    border-radius: 12px;
-    border: none !important;
-    color: #8b36d1 !important;
-    padding: 15px 32px !important;
-    text-align: center !important;
-    display: inline-block !important;
-    font-size: 16px !important;
-    position: absolute !important;
-  }
-  #Goodbye {
-    background-color:black !important; 
-    border-radius: 12px !important;
-    border: none !important;
-    color: #8b36d1 !important;
-    padding: 15px 32px !important;
-    text-align: center !important;
-    display: inline-block !important;
-    font-size: 16px !important;
-    position:relative !important;
-  }
-button:hover {
-      opacity: 100 !important;
-  }
-  .flex-container {
-    position: static !important;
-  }
+  transform: scaleX(-1);
+}
+
+#planch-container {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
+}
+
+.btn-virtical-align:hover {
+  background-color: snow;
+  color: black;
+  cursor: pointer;
+}
+
+.btn-virtical-align {
+  margin-top: auto;
+  margin-bottom: auto;
+
+  padding: 2rem;
+  border: 1px solid white;
+  border-radius: 1rem;
+  color: white;
+  font-size: x-large;
+
+  text-align: center;
+  display: inline-block;
+  width: 173px !important;
+}
+
